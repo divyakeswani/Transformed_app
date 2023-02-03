@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  devise_for :users, controllers: {
+    sessions: 'users/sessions',
+    confirmations: 'users/confirmations',
+    passwords: 'users/passwords',
+    registrations: 'users/registrations'
+  }
 
-  # Defines the root path route ("/")
+  get 'static_pages/landing_page'
+  get 'static_pages/dashboard'
   root "static_pages#landing_page"
 end
