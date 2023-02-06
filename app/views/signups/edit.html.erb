@@ -1,0 +1,44 @@
+<%= form_for @user, url: :signup  do |f| %>
+  <div class="field">
+    <%= f.label :email %><br />
+    <%= f.text_field :email, value: @user.email, disabled: true %>
+  </div>
+
+  <div class="field">
+    <%= f.fields_for :user_profile do |p| %>
+      <%= p.label :First_Name %><br />
+      <%= p.text_field :first_name, autocomplete: "first_name" %><br />
+
+      <%= p.label :Last_Name %><br />
+      <%= p.text_field :last_name, autocomplete: "last_name" %><br />
+
+      <%= p.label :Phone %><br />
+      <%= p.text_field :phone, autocomplete: "phone" %><br />
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.fields_for :organization_profile do |o| %>
+      <%= o.label :Organization_Name %><br />
+      <%= o.text_field :organization_name, autocomplete: "organization_name" %><br />
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password %> <br />
+    <%= f.password_field :password, autocomplete: "new-password" %>
+    <% if @minimum_password_length %>
+      <br />
+      <em><%= @minimum_password_length %> characters minimum</em>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <div class="field">
+    <%= f.submit "Sign-up" %>
+  </div>
+<% end %>

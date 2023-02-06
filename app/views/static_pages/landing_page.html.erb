@@ -7,9 +7,14 @@
 <% else %>
   <div class='background'>
     <div>
+      <h2>Hey! Do you want to connect with us</h2>
       <div class='text'>
-        <%= link_to 'Register Now!', new_user_registration_path, class:
-          'btn btn-lg btn-primary' %>
+        <%= form_for User.new, url: :user_registration do |f| %>
+          <%= f.label :email %><br />
+          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+          <%= f.hidden_field :password,value: '123456' %>
+          <%= f.submit "Connect" %>
+        <% end %>
       </div>
       <div class="text">
         <h2>

@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   get 'static_pages/landing_page'
   get 'static_pages/dashboard'
   root "static_pages#landing_page"
+
+  resources :signups, only: [:edit, :update, :complete]
 end
