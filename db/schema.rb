@@ -10,19 +10,46 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_06_131655) do
-  create_table "organization_profiles", force: :cascade do |t|
-    t.integer "user_id", null: false
+ActiveRecord::Schema[7.0].define(version: 2023_02_07_080120) do
+  create_table "group_members", force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "member_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id", "member_id"], name: "index_group_members_on_group_id_and_member_id", unique: true
+    t.index ["group_id"], name: "index_group_members_on_group_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.integer "organization_id", null: false
+    t.integer "leader_id", null: false
+    t.string "group_name", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_groups_on_organization_id"
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.integer "creator_id", null: false
     t.string "organization_name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_organization_profiles_on_user_id"
+    t.index "\"organization_id\", \"group_name\"", name: "index_organizations_on_organization_id_and_group_name", unique: true
+    t.index ["creator_id", "organization_name"], name: "index_organizations_on_creator_id_and_organization_name", unique: true
+  end
+
+  create_table "roles", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "role_name", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_roles_on_user_id"
   end
 
   create_table "user_profiles", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "phone"
-    t.string "first_name"
+    t.integer "phone", null: false
+    t.string "first_name", null: false
     t.string "last_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -55,6 +82,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_131655) do
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
-  add_foreign_key "organization_profiles", "users"
+  add_foreign_key "group_members", "groups"
+  add_foreign_key "group_members", "users", column: "member_id"
+  add_foreign_key "groups", "organizations"
+  add_foreign_key "groups", "users", column: "leader_id"
+  add_foreign_key "organizations", "users", column: "creator_id"
+  add_foreign_key "roles", "users"
   add_foreign_key "user_profiles", "users"
 end
