@@ -1,46 +1,48 @@
-<div class="form_fields">
-  <%= form_for @user, url: :signup  do |f| %>
-    <div class="field">
-      <%= f.label :email %><br />
-      <%= f.text_field :email, value: @user.email, disabled: true %>
-    </div>
+<% if user_signed_in? %>
+  <h2>Not allowed</h2>
+<% elsif @user.confirmed? %>
+  <h2>You have already signed-up</h2>
+<% else %>
+  <div class="form_fields">
+    <%= form_for @user, url: :signup  do |f| %>
+      <div class="field">
+        <h3>Email:</h3>
+        <%= f.text_field :email, value: @user.email, disabled: true %>
+      </div>
 
-    <div class="field">
-      <%= f.fields_for :user_profile do |p| %>
-        <%= p.label :First_Name %><br>
-        <%= p.text_field :first_name, autocomplete: "first_name" %><br />
+      <div class="field">
+        <h3>First Name:</h3>
+        <%= text_field_tag :first_name  %><br />
 
-        <%= p.label :Last_Name %><br />
-        <%= p.text_field :last_name, autocomplete: "last_name" %><br />
+        <h3>Last Name:</h3>
+        <%= text_field_tag :last_name  %><br />
 
-        <%= p.label :Phone %><br />
-        <%= p.text_field :phone, autocomplete: "phone" %><br />
-      <% end %>
-    </div>
+        <h3>Phone:</h3>
+        <%= text_field_tag :phone %><br />
+      </div>
 
-    <div class="field">
-      <%= f.fields_for :organization do |o| %>
-        <%= o.label :Organization_Name %><br />
-        <%= o.text_field :organization_name, autocomplete: "organization_name" %><br />
-      <% end %>
-    </div>
+      <div class="field">
+        <h3>Organization Name:</h3><br />
+        <%= text_field_tag :organization_name %><br />
+      </div>
 
-    <div class="field">
-      <%= f.label :password %> <br />
-      <%= f.password_field :password, autocomplete: "new-password" %>
-      <% if @minimum_password_length %>
-        <br />
-        <em><%= @minimum_password_length %> characters minimum</em>
-      <% end %>
-    </div>
+      <div class="field">
+        <h3>password</h3> <br />
+        <%= f.password_field :password, autocomplete: "new-password" %>
+        <% if @minimum_password_length %>
+          <br />
+          <em><%= @minimum_password_length %> characters minimum</em>
+        <% end %>
+      </div>
 
-    <div class="field">
-      <%= f.label :password_confirmation %><br />
-      <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-    </div>
+      <div class="field">
+        <h3>password_confirmation</h3><br />
+        <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+      </div>
 
-    <div class="field">
-      <%= f.submit "Sign-up" %>
-    </div>
-  <% end %>
-</div>
+      <div class="field">
+        <%= f.submit "Sign-up" %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

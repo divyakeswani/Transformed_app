@@ -13,6 +13,6 @@ class CreateGroups < ActiveRecord::Migration[7.0]
     add_foreign_key :groups, :users, column: :leader_id
 
     # UNIQE index of organization_id and group_name
-    add_index :organizations, [:organization_id, :group_name], unique: true
+    add_index :groups, [:organization_id, :group_name], unique: true
   end
 end

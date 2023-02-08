@@ -20,7 +20,7 @@ gem 'jquery-rails'
 gem 'sass-rails', '>= 6'
 # gem for bootstrap
 gem 'bootstrap-sass', '3.4.1'
-
+gem 'pry'
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem "importmap-rails"
 

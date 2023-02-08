@@ -2,8 +2,14 @@
   <% if user_signed_in? %>
     <div class="background">
       <h4>Go to Home tab for view users to chat</h4>
-      <%= link_to 'Log out', destroy_user_session_path,
-              data: { turbo_method: :delete } %>
+      <h2><%= link_to 'Log out', destroy_user_session_path,
+              data: { turbo_method: :delete } %></h2>
+      <div>
+        <h1><%= current_user.user_profile.first_name %></h1>
+      </div>
+      <div>
+        <h1><%= current_user.organization.organization_name %></h1>
+      </div>
     </div>
   <% else %>
     <div class='background'>

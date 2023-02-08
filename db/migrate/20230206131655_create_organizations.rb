@@ -8,9 +8,7 @@ class CreateOrganizations < ActiveRecord::Migration[7.0]
     end
 
     # Add Foreign key user_id as creator_id
-    add_foreign_key :organizations, :users, column: :creator_id
+    add_foreign_key :organizations, :users, column: :creator_id, unique: true
 
-    # UNIQE index of creator_id and organization_name
-    add_index :organizations, [:creator_id, :organization_name], unique: true
   end
 end

@@ -26,6 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_07_080120) do
     t.string "group_name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["organization_id", "group_name"], name: "index_groups_on_organization_id_and_group_name", unique: true
     t.index ["organization_id"], name: "index_groups_on_organization_id"
   end
 
@@ -34,8 +35,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_07_080120) do
     t.string "organization_name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index "\"organization_id\", \"group_name\"", name: "index_organizations_on_organization_id_and_group_name", unique: true
-    t.index ["creator_id", "organization_name"], name: "index_organizations_on_creator_id_and_organization_name", unique: true
   end
 
   create_table "roles", force: :cascade do |t|
