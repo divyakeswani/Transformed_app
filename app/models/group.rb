@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# app/models/group.rb
 class Group < ApplicationRecord
   belongs_to :organization
   belongs_to :leader, class_name: 'User',

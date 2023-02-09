@@ -1,0 +1,12 @@
+<header>
+  <ul class="navbar-top">
+    <% if user_signed_in? %>
+      <li><%= link_to 'Home', root_path, class: 'color' %></li>
+      <li><%= link_to 'Log out', destroy_user_session_path,
+            data: { turbo_method: :delete }, class: 'color' %></li>
+    <% else %>
+      <li><%= link_to 'Home', root_path, class: 'color' %></li>
+      <li><%= link_to 'Help', static_pages_dashboard_path, class: 'color' %></li>
+    <% end %>
+  </ul>
+</header>

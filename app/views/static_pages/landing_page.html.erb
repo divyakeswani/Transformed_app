@@ -1,17 +1,21 @@
-<div class="form_fields">
-  <% if user_signed_in? %>
-    <div class="background">
-      <h4>Go to Home tab for view users to chat</h4>
-      <h2><%= link_to 'Log out', destroy_user_session_path,
-              data: { turbo_method: :delete } %></h2>
-      <div>
-        <h1><%= current_user.user_profile.first_name %></h1>
-      </div>
-      <div>
-        <h1><%= current_user.organization.organization_name %></h1>
-      </div>
+<% if user_signed_in? %>
+  <div class="background">
+    <div class="tabs">
+      <div class="tab-size"><button style="border:none;">Dashboard</button></div>
+      <div class="tab-size"><button style="border:none;">Settings</button></div>
+      <div class="tab-size"><button style="border:none;">Curriculum</button></div>
+      <div class="tab-size"><button style="border:none;">Analytics</button></div>
+      <div class="tab-size"><button style="border:none;">Reminders</button></div>
+      <div class="tab-size"><button style="border:none;">View Groups</button></div>
+      <div class="tab-size"><button style="border:none;">Invite Organization
+      </button></div>
     </div>
-  <% else %>
+    <div>
+
+    </div>
+  </div>
+<% else %>
+  <div class="form_fields">
     <div class='background'>
       <div>
         <h2>Hey! Do you want to connect with us</h2>
@@ -31,5 +35,5 @@
         </div>
       </div>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>

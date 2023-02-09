@@ -1,48 +1,53 @@
-<% if user_signed_in? %>
-  <h2>Not allowed</h2>
-<% elsif @user.confirmed? %>
-  <h2>You have already signed-up</h2>
-<% else %>
-  <div class="form_fields">
-    <%= form_for @user, url: :signup  do |f| %>
-      <div class="field">
-        <h3>Email:</h3>
-        <%= f.text_field :email, value: @user.email, disabled: true %>
-      </div>
+<% if @user.present? %>
+  <% if user_signed_in? %>
+    <h2>Not allowed</h2>
+  <% elsif @user.confirmed? %>
+    <h2>You have already signed-up</h2>
+  <% else %>
+    <div class="container">
+      <div class="form_fields">
+        <%= form_for @user, url: :signup  do |f| %>
+          <div class="field">
+            <h4>Email:</h4>
+            <%= f.text_field :email, value: @user.email, disabled: true %>
+          </div>
 
-      <div class="field">
-        <h3>First Name:</h3>
-        <%= text_field_tag :first_name  %><br />
+          <div class="field">
+            <h4>First Name:</h4>
+            <%= text_field_tag :'user_profile[first_name]'  %><br />
 
-        <h3>Last Name:</h3>
-        <%= text_field_tag :last_name  %><br />
+            <h4>Last Name:</h4>
+            <%= text_field_tag :'user_profile[last_name]'  %><br />
 
-        <h3>Phone:</h3>
-        <%= text_field_tag :phone %><br />
-      </div>
+            <h4>Phone:</h4>
+            <%= text_field_tag :'user_profile[phone]' %><br />
+          </div>
 
-      <div class="field">
-        <h3>Organization Name:</h3><br />
-        <%= text_field_tag :organization_name %><br />
-      </div>
+          <div class="field">
+            <h4>Organization Name:</h4>
+            <%= text_field_tag :'organization[organization_name]' %><br />
+            <%= hidden_field_tag :'organization[creator_id]', @user.id %>
+          </div>
 
-      <div class="field">
-        <h3>password</h3> <br />
-        <%= f.password_field :password, autocomplete: "new-password" %>
-        <% if @minimum_password_length %>
-          <br />
-          <em><%= @minimum_password_length %> characters minimum</em>
+          <div class="field">
+            <h4>password:</h4>
+            <%= f.password_field :password, autocomplete: "new-password" %>
+            <% if @minimum_password_length %>
+              <br />
+              <em><%= @minimum_password_length %> characters minimum</em>
+            <% end %>
+          </div>
+
+          <div class="field">
+            <h4>password_confirmation:</h4>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password" %><br><br>
+          </div>
+
+          <div class="field">
+            <%= f.submit "Sign-up" %>
+          </div>
         <% end %>
       </div>
-
-      <div class="field">
-        <h3>password_confirmation</h3><br />
-        <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-      </div>
-
-      <div class="field">
-        <%= f.submit "Sign-up" %>
-      </div>
-    <% end %>
-  </div>
+    </div>
+  <% end %>
 <% end %>
