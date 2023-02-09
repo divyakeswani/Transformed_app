@@ -10,7 +10,7 @@ class SignupsController < ApplicationController
       update_user()
     else
       redirect_to request.referrer
-      flash[:message] = 'You have to fill required fields'
+      flash[:notice] = 'You have to fill required fields'
     end
   end
 
@@ -28,20 +28,20 @@ class SignupsController < ApplicationController
       user_profile()
       organization()
       redirect_to new_user_session_path
-      flash[:message] = 'you have successfully signed-up'
+      flash[:notice] = 'you have successfully signed-up'
     else
       redirect_to request.referrer
-      flash[:message] = 'You have to fill your password'
+      flash[:notice] = 'You have to fill your password'
     end
   end
 
   def user_profile
-    UserProfile.create(first_name: params[:first_name], last_name:
-      params[:last_name], phone: params[:phone], user_id: @user.id)
+    @user.create_user_profile(first_name: params[:first_name], last_name:
+      params[:last_name], phone: params[:phone])
   end
 
   def organization
-    Organization.create(organization_name: params[:organization_name],
-      creator_id: @user.id)
+    binding.pry
+    @user.create_organization(organization_name: params[:organization_name])
   end
 end
