@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_07_080120) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_10_110955) do
   create_table "group_members", force: :cascade do |t|
     t.integer "group_id", null: false
     t.integer "member_id", null: false
@@ -28,6 +28,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_07_080120) do
     t.datetime "updated_at", null: false
     t.index ["organization_id", "group_name"], name: "index_groups_on_organization_id_and_group_name", unique: true
     t.index ["organization_id"], name: "index_groups_on_organization_id"
+  end
+
+  create_table "organization_memberships", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_organization_memberships_on_organization_id"
+    t.index ["user_id", "organization_id"], name: "index_organization_memberships_on_user_id_and_organization_id", unique: true
+    t.index ["user_id"], name: "index_organization_memberships_on_user_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -75,8 +85,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_07_080120) do
     t.datetime "locked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "invitation_token"
+    t.datetime "invitation_created_at"
+    t.datetime "invitation_sent_at"
+    t.datetime "invitation_accepted_at"
+    t.integer "invitation_limit"
+    t.string "invited_by_type"
+    t.integer "invited_by_id"
+    t.integer "invitations_count", default: 0
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
+    t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
+    t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
@@ -85,6 +106,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_07_080120) do
   add_foreign_key "group_members", "users", column: "member_id"
   add_foreign_key "groups", "organizations"
   add_foreign_key "groups", "users", column: "leader_id"
+  add_foreign_key "organization_memberships", "organizations"
+  add_foreign_key "organization_memberships", "users"
   add_foreign_key "organizations", "users", column: "creator_id"
   add_foreign_key "roles", "users"
   add_foreign_key "user_profiles", "users"

@@ -4,7 +4,8 @@ Rails.application.routes.draw do
     confirmations: 'users/confirmations',
     passwords: 'users/passwords',
     registrations: 'users/registrations',
-    unlocks: 'users/unlocks'
+    unlocks: 'users/unlocks',
+    invitations: 'users/invitations'
   }
 
   get 'static_pages/landing_page'

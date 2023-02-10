@@ -1,14 +1,13 @@
 <% if user_signed_in? %>
-  <div class="background">
+  <div class="background" data-controller='tab'>
     <div class="tabs">
-      <div class="tab-size"><button style="border:none;">Dashboard</button></div>
-      <div class="tab-size"><button style="border:none;">Settings</button></div>
-      <div class="tab-size"><button style="border:none;">Curriculum</button></div>
-      <div class="tab-size"><button style="border:none;">Analytics</button></div>
-      <div class="tab-size"><button style="border:none;">Reminders</button></div>
-      <div class="tab-size"><button style="border:none;">View Groups</button></div>
-      <div class="tab-size"><button style="border:none;">Invite Organization
-      </button></div>
+      <div class="tab-size"><%= link_to 'Dashboard', ''  %></div>
+      <div class="tab-size"><%= link_to 'Settings','' %></div>
+      <div class="tab-size"><%= link_to 'Curriculum', '' %></div>
+      <div class="tab-size"><%= link_to  'Analytics', ''%></div>
+      <div class="tab-size"><%= link_to  'Reminders', ''%></div>
+      <div class="tab-size" data-action="tab#infoShow"><%= link_to  'View Groups', new_user_invitation_path  %></div>
+      <div class="tab-size"><%= link_to  'Invite Organization', ''%></div>
     </div>
     <div>
 
