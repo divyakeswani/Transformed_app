@@ -13,6 +13,7 @@ class SignupsController < ApplicationController
   def update
     if @user.update(user_params)
       @user.update(confirmed_at: Time.current)
+      @org.save
       @user.create_role(role_name: 'admin')
       redirect_to new_user_session_path
       flash[:notice] = 'you have successfully signed-up'
@@ -41,7 +42,7 @@ class SignupsController < ApplicationController
   # permitting params for creating organization
   def organization_params
     params.require(:organization).permit(
-      :organization_name, :creator_id
+      :organization_name
     )
   end
 
@@ -58,7 +59,7 @@ class SignupsController < ApplicationController
 
   # creating organization
   def organization
-    @org = Organization.create(organization_params)
+    @org = @user.build_organization(organization_params)
     unless @org.valid?
       redirect_to request.referrer
       flash[:notice] = @org.errors.full_messages

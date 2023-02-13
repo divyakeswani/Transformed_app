@@ -1,6 +1,6 @@
 <% if user_signed_in? %>
   <div class="background" data-controller='tab'>
-    <div class="tabs">
+    <div class="tabs" data-tab-target="info">
       <div class="tab-size"><%= link_to 'Dashboard', ''  %></div>
       <div class="tab-size"><%= link_to 'Settings','' %></div>
       <div class="tab-size"><%= link_to 'Curriculum', '' %></div>
@@ -10,7 +10,7 @@
       <div class="tab-size"><%= link_to  'Invite Organization', ''%></div>
     </div>
     <div>
-
+    
     </div>
   </div>
 <% else %>
