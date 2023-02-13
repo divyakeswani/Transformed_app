@@ -25,6 +25,7 @@
     <div class="field">
       <h4>Group Name:</h4>
       <%= text_field_tag :'group[group_name]' %><br />
+      <%= hidden_field_tag :'group[organization_id]', current_user.organization %>
     </div>
 
     <div class="actions">

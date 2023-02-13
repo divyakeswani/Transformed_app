@@ -7,5 +7,6 @@ class Group < ApplicationRecord
                     foreign_key: 'leader_id'
 
   has_many :group_members, dependent: :destroy
+  validates_presence_of :group_name
   validates_uniqueness_of :organization_id, scope: [:group_name]
 end
