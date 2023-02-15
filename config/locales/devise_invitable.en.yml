@@ -13,8 +13,8 @@ en:
         header: "Add A Leader"
         submit_button: "Send an invite"
       edit:
-        header: "Set your password"
-        submit_button: "Set my password"
+        header: "Sign-Up To Your Account"
+        submit_button: "Sign-up"
     mailer:
       invitation_instructions:
         subject: "Invitation instructions"

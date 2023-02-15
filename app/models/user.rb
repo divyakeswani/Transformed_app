@@ -13,6 +13,4 @@ class User < ApplicationRecord
   has_many :groups, foreign_key: 'leader_id', dependent: :destroy
   has_many :group_members, foreign_key: 'member_id', dependent: :destroy
   has_many :organization_memberships, dependent: :destroy
-
-  # accepts_nested_attributes_for :user_profile, :allow_destroy => true
 end

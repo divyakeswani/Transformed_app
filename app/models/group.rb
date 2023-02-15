@@ -8,5 +8,5 @@ class Group < ApplicationRecord
 
   has_many :group_members, dependent: :destroy
   validates_presence_of :group_name
-  validates_uniqueness_of :organization_id, scope: [:group_name]
+  validates_uniqueness_of :group_name, scope: [:organization_id]
 end

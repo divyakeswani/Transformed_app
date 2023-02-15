@@ -14,12 +14,12 @@ class SignupsController < ApplicationController
     if @user.update(user_params)
       @user.update(confirmed_at: Time.current)
       @org.save
-      @user.create_role(role_name: 'admin')
+      membership_and_role(@user, @org)
       redirect_to new_user_session_path
       flash[:notice] = 'you have successfully signed-up'
     else
-      redirect_to request.referrer
       flash[:notice] = 'You have to fill your password'
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -52,8 +52,8 @@ class SignupsController < ApplicationController
     if @profile.valid?
       organization()
     else
-      redirect_to request.referrer
       flash[:notice] = @profile.errors.full_messages
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -61,13 +61,18 @@ class SignupsController < ApplicationController
   def organization
     @org = @user.build_organization(organization_params)
     unless @org.valid?
-      redirect_to request.referrer
       flash[:notice] = @org.errors.full_messages
+      render :edit, status: :unprocessable_entity
     end
   end
 
   # set user
   def set_user
     @user = User.find_by(id: params[:id])
+  end
+
+  def membership_and_role(user, org)
+    user.create_role(role_name: 'admin')
+    user.organization_memberships.create(organization_id: org.id)
   end
 end

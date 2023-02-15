@@ -1,39 +1,81 @@
-<div class="form_fields" data-controller='tab'>
+<% if current_user.role.role_name == 'admin' %>
+  <div class="form_fields" data-controller='tab'>
 
-<h2><%= t "devise.invitations.new.header" %></h2>
-  <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
-    <%= render "devise/shared/error_messages", resource: resource %>
+  <h2><%= t "devise.invitations.new.header" %></h2>
+    <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
 
-    <div class="field">
-      <h4>First Name:</h4>
-      <%= text_field_tag :'user_profile[first_name]'  %><br />
-
-      <h4>Last Name:</h4>
-      <%= text_field_tag :'user_profile[last_name]'  %><br />
-
-      <h4>Phone:</h4>
-      <%= text_field_tag :'user_profile[phone]' %><br />
-    </div>
-
-    <% resource.class.invite_key_fields.each do |field| -%>
       <div class="field">
-        <%= f.label field %><br />
-        <%= f.text_field field %>
-      </div>
-      <div class='field'>
-        <%= hidden_field_tag  :'user[password]' , '123456' %>
-        <%= hidden_field_tag :'user[skip_invitation]', 'true' %>
-      </div>
-    <% end -%>
+        <h4>First Name:</h4>
+        <%= text_field_tag :'user_profile[first_name]'  %><br />
 
-    <div class="field">
-      <h4>Group Name:</h4>
-      <%= text_field_tag :'group[group_name]' %><br />
-      <%= hidden_field_tag :'group[organization_id]', current_user.organization %>
-    </div>
+        <h4>Last Name:</h4>
+        <%= text_field_tag :'user_profile[last_name]'  %><br />
 
-    <div class="actions">
-      <%= f.submit t("devise.invitations.new.submit_button") %>
-    </div>
-  <% end %>
-</div>
+        <h4>Phone:</h4>
+        <%= text_field_tag :'user_profile[phone]' %><br />
+      </div>
+
+      <% resource.class.invite_key_fields.each do |field| -%>
+        <div class="field">
+          <%= f.label field %><br />
+          <%= f.text_field field %>
+        </div>
+        <div class='field'>
+          <%= hidden_field_tag  :'user[password]' , '123456' %>
+          <%= hidden_field_tag :'user[skip_invitation]', 'true' %>
+          <%= hidden_field_tag :'role[role_name]', 'leader' %>
+        </div>
+      <% end -%>
+
+      <div class="field">
+        <h4>Group Name:</h4>
+        <%= text_field_tag :'group[group_name]' %><br />
+        <%= hidden_field_tag :'group[organization_id]', current_user.organization.id %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit t("devise.invitations.new.submit_button") %>
+      </div>
+    <% end %>
+  </div>
+<% elsif current_user.role.role_name == 'leader' %>
+  <div class="form_fields" data-controller='tab'>
+
+  <h2>Add A New Member to Your Group</h2>
+    <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="field">
+        <h4>First Name:</h4>
+        <%= text_field_tag :'user_profile[first_name]'  %><br />
+
+        <h4>Last Name:</h4>
+        <%= text_field_tag :'user_profile[last_name]'  %><br />
+
+        <h4>Phone:</h4>
+        <%= text_field_tag :'user_profile[phone]' %><br />
+      </div>
+
+      <% resource.class.invite_key_fields.each do |field| -%>
+        <div class="field">
+          <%= f.label field %><br />
+          <%= f.text_field field %>
+        </div>
+        <div class='field'>
+          <%= hidden_field_tag  :'user[password]' , '123456' %>
+          <%= hidden_field_tag :'user[skip_invitation]', 'true' %>
+          <%= hidden_field_tag :'role[role_name]', 'member' %>
+        </div>
+      <% end -%>
+
+      <div class="actions">
+        <%= f.submit t("devise.invitations.new.submit_button") %>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div>
+    <h2>Ops! you are not authorize for this action</h2>
+  </div>
+<% end %>
