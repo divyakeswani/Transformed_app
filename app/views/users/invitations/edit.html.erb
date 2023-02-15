@@ -8,22 +8,22 @@
 
       <div class="field">
         <h4>First Name:</h4>
-        <%= f.text_field :'user_profile[first_name]', value: @user.user_profile.first_name %>
+        <%= text_field_tag :'user_profile[first_name]',  @user.user_profile.first_name %>
       </div>
 
       <div class="field">
         <h4>Last Name:</h4>
-        <%= f.text_field :last_name, value: @user.user_profile.last_name, disabled: true %>
+        <%= text_field_tag :'user_profile[last_name]', @user.user_profile.last_name %>
       </div>
 
       <div class="field">
         <h4>Email:</h4>
-        <%= f.text_field :email, value: @user.email, disabled: true %>
+        <%= text_field_tag :email, @user.email, disabled: true %>
       </div>
 
       <div class="field">
         <h4>phone:</h4>
-        <%= f.text_field :phone, value: @user.user_profile.phone, disabled: true %>
+        <%= text_field_tag :'user_profile[phone]', @user.user_profile.phone %>
       </div>
 
       <% if f.object.class.require_password_on_accepting %>

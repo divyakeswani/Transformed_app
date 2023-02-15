@@ -10,7 +10,7 @@ class Users::InvitationsController < Devise::InvitationsController
     if resource_invited
       @profile = resource.create_user_profile(profile_params)
       if @profile.errors.empty?
-        if next_step(resource)
+        if check_leader_or_member(resource)
           resource.deliver_invitation
           if is_flashing_format? && resource.invitation_sent_at
             set_flash_message :notice, :send_instructions, email: resource.email
@@ -43,10 +43,10 @@ class Users::InvitationsController < Devise::InvitationsController
     yield resource if block_given?
 
     if invitation_accepted
-      update_profile(resource)
       if resource.class.allow_insecure_sign_in_after_accept
         flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
         set_flash_message :notice, flash_message if is_flashing_format?
+        update_profile(resource)
         resource.after_database_authentication
         sign_in(resource_name, resource)
         respond_with resource, location: after_accept_path_for(resource)
@@ -77,7 +77,7 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   # do next process
-	def next_step(resource)
+	def check_leader_or_member(resource)
     if params[:role][:role_name] == 'leader'
       @group = resource.groups.build(group_params)
       if @group.valid?
@@ -110,6 +110,6 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def update_profile(resource)
-    resource.update(profile_params) if profile_params.present
+    resource.update(profile_params) if profile_params.present?
   end
 end
