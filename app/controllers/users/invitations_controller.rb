@@ -8,8 +8,8 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def create
-    self.resource = invite_resource()
-    build_profile(resource)
+    binding.pry
+    self.resource = User.invite!() 
 
     resource_invited = resource.errors.empty?
     yield resource if block_given?
@@ -30,8 +30,7 @@ class Users::InvitationsController < Devise::InvitationsController
   end
 
   def update
-    binding.pry
-		raw_invitation_token = update_resource_params[:invitation_token]
+		raw_invitation_token = user_params[:invitation_token]
 		self.resource = accept_resource
 		invitation_accepted = resource.errors.empty?
 
@@ -42,7 +41,6 @@ class Users::InvitationsController < Devise::InvitationsController
 				flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
 				set_flash_message :notice, flash_message if is_flashing_format?
 				resource.after_database_authentication
-				# update_user_role_organization(resource)
 				sign_in(resource_name, resource)
 				respond_with resource, location: after_accept_path_for(resource)
 			else
@@ -53,16 +51,6 @@ class Users::InvitationsController < Devise::InvitationsController
 			resource.invitation_token = raw_invitation_token
 			respond_with_navigational(resource) { render :edit, status: :unprocessable_entity }
 		end
-  end
-
-  def update_user_role_organization(resource)
-		invited_by_user = User.find(resource.invited_by_id)
-		organization = Organization.where(user_id: invited_by_user.id).last
-		role = Role.find_by(role_name: resource.invited_role)
-		# Create Membership and Set Role
-		OrganizationMembership.create!(
-				organization: organization, user: resource, role: role
-		)
   end
 
   def build_profile(resource)
@@ -83,13 +71,11 @@ class Users::InvitationsController < Devise::InvitationsController
     end
   end
 
-  protected
-
-  def invite_resource(&block)
-    resource_class.invite!(invite_params, current_inviter, skip_invitation: true, &block)
-  end
-
   private
+
+  def user_params
+    params.require(:user).permit(:email, :password, :skip_invitation)
+  end
 
   # Permit the new params here.
   def group_params

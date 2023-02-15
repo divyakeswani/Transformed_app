@@ -20,6 +20,10 @@
         <%= f.label field %><br />
         <%= f.text_field field %>
       </div>
+      <div class='field'>
+        <%= hidden_field_tag  :'user[password]' , '123456' %>
+        <%= hidden_field_tag :'user[skip_invitation]', 'true' %>
+      </div>
     <% end -%>
 
     <div class="field">
