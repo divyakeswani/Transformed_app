@@ -60,6 +60,17 @@ class Users::InvitationsController < Devise::InvitationsController
     end
   end
 
+  def resend_invite
+    @user = User.find_by(id: params[:id])
+    if @user.created_by_invite? && @user.invitation_accepted? == false
+      @user.invite!
+      flash[:notice] = 'user reinvited'
+      redirect_to request.referrer
+    else
+      flash[:notice] = 'user already active'
+      redirect_to request.referrer
+    end
+  end
 
   private
 
