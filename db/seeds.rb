@@ -35,4 +35,19 @@ def make_organization_admin(attrs)
   UserProfile.create!(
     first_name: 'john', user: user, phone: '123456'
   )
+
+  Role.create!(
+    role_name: 'admin', user: user
+  )
+end
+
+# Add User to Development ENV
+make_organization_admin(
+  email: 'organization.admin@example.com'
+)
+
+# Add TaskList to Development ENV for test functionality
+if Rails.env.development?
+  TaskList.where(title: 'To be done', organization_board_id: 1).first_or_create
+  Task.where(title: :'Read redis', start_date_time: Time.now, creator_id: 1, task_list_id: 1).first_or_create
 end
