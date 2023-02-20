@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     patch 'users/:id/resend_invitation', to: 'users/invitations#resend_invite'
+    get 'users/new_form', to: 'users/invitations#new_form'
+    post 'users/replace_leader_invite', to: 'users/invitations#replace_leader_invite'
   end
 
   get 'static_pages/landing_page'
