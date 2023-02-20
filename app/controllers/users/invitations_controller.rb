@@ -10,23 +10,20 @@ class Users::InvitationsController < Devise::InvitationsController
     if resource_invited
       @profile = resource.create_user_profile(profile_params)
       if @profile.errors.empty?
-        if check_leader_or_member(resource)
-          resource.deliver_invitation
-          if is_flashing_format? && resource.invitation_sent_at
-            set_flash_message :notice, :send_instructions, email: resource.email
-          end
-          if method(:after_invite_path_for).arity == 1
-            respond_with resource, location: after_invite_path_for(current_inviter)
-          else
-            respond_with resource, location: after_invite_path_for(current_inviter, resource)
-          end
+        if params[:group].present?
+          group_creation(resource)
+        else
+          group_leader_update(resource)
         end
       else
         flash[:notice] = @profile.errors.full_messages
         redirect_to request.referrer
       end
     else
-      respond_with_navigational(resource) { render :new, status: :unprocessable_entity }
+      respond_with_navigational(resource) {
+        flash[:notice] = resource.errors.full_messages
+        redirect_to request.referrer
+      }
     end
   end
 
@@ -46,8 +43,8 @@ class Users::InvitationsController < Devise::InvitationsController
       if resource.class.allow_insecure_sign_in_after_accept
         flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
         set_flash_message :notice, flash_message if is_flashing_format?
-        update_profile(resource)
         resource.after_database_authentication
+        update_password(resource)
         sign_in(resource_name, resource)
         respond_with resource, location: after_accept_path_for(resource)
       else
@@ -74,20 +71,22 @@ class Users::InvitationsController < Devise::InvitationsController
 
   private
 
+  # Permit the user params here.
   def user_params
-    params.require(:user).permit(:email, :password, :skip_invitation)
+    params.require(:user).permit(:email, :password, :password_confirmation, :skip_invitation, :invitation_token)
   end
 
+  # Permit the role params here.
   def role_params
     params.require(:role).permit(:role_name)
   end
 
-  # Permit the new params here.
+  # Permit the group params here.
   def group_params
 		params.require(:group).permit(:group_name, :organization_id)
   end
 
-  # do next process
+  # creating group
 	def check_leader_or_member(resource)
     if params[:role][:role_name] == 'leader'
       @group = resource.groups.build(group_params)
@@ -110,17 +109,43 @@ class Users::InvitationsController < Devise::InvitationsController
     )
   end
 
+  # creating mambership and role
   def membership_role_of_leader(resource, group)
     OrganizationMembership.create(user_id: resource.id, organization_id: group.organization_id)
     Role.create(role_name: 'leader', user_id: resource.id)
   end
 
+   # creating mambership and role
   def membership_role_of_member(resource)
     OrganizationMembership.create(user_id: resource.id, organization_id: resource.invited_by.invited_by.organization.id)
     Role.create(role_name: 'member', user_id: resource.id)
   end
 
-  def update_profile(resource)
-    resource.update(profile_params) if profile_params.present?
+  # updating password after accepting invitation
+  def update_password(resource)
+    resource.update!(user_params) if user_params.present?
+  end
+
+  def group_creation(resource)
+    if check_leader_or_member(resource)
+      resource.deliver_invitation
+      if is_flashing_format? && resource.invitation_sent_at
+        set_flash_message :notice, :send_instructions, email: resource.email
+      end
+      if method(:after_invite_path_for).arity == 1
+        respond_with resource, location: after_invite_path_for(current_inviter)
+      else
+        respond_with resource, location: after_invite_path_for(current_inviter, resource)
+      end
+    end
+  end
+
+  def group_leader_update(resource)
+    group = Group.find_by(id: params[:group_id])
+    group.update(leader_id: resource.id)
+    membership_role_of_leader(resource, group)
+    resource.deliver_invitation
+    flash[:notice] = 'Invitation successfully sent'
+    redirect_to new_user_invitation_path
   end
 end

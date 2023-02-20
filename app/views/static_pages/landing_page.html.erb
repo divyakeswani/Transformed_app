@@ -20,7 +20,7 @@
         <%= form_for User.new, url: :user_registration do |f| %>
           <%= f.label :email %><br />
           <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-          <%= f.hidden_field :password,value: '123456' %>
+          <%= f.hidden_field :password,value: Devise.friendly_token[5,20] %>
           <%= f.submit "Connect" %>
         <% end %>
       </div>
