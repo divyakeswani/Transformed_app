@@ -1,0 +1,2 @@
+<%= line_chart User.group_by_day(:created_at, range: 1.month.ago..Time.now)
+ .count %>

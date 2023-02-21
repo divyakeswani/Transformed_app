@@ -11,8 +11,11 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_02_10_110955) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "group_members", force: :cascade do |t|
-    t.integer "group_id", null: false
+    t.bigint "group_id", null: false
     t.integer "member_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -21,7 +24,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_110955) do
   end
 
   create_table "groups", force: :cascade do |t|
-    t.integer "organization_id", null: false
+    t.bigint "organization_id", null: false
     t.integer "leader_id", null: false
     t.string "group_name", default: "", null: false
     t.datetime "created_at", null: false
@@ -31,8 +34,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_110955) do
   end
 
   create_table "organization_memberships", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "organization_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id"], name: "index_organization_memberships_on_organization_id"
@@ -48,7 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_110955) do
   end
 
   create_table "roles", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "role_name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -56,7 +59,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_110955) do
   end
 
   create_table "user_profiles", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.integer "phone", null: false
     t.string "first_name", null: false
     t.string "last_name"
@@ -91,7 +94,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_10_110955) do
     t.datetime "invitation_accepted_at"
     t.integer "invitation_limit"
     t.string "invited_by_type"
-    t.integer "invited_by_id"
+    t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

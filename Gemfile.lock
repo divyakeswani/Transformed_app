@@ -87,6 +87,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
+    chartkick (5.0.1)
     coderay (1.1.3)
     concurrent-ruby (1.2.0)
     crass (1.0.6)
@@ -110,6 +111,8 @@ GEM
     ffi (1.15.5)
     globalid (1.1.0)
       activesupport (>= 5.0)
+    groupdate (6.2.0)
+      activesupport (>= 5.2)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.1.5)
@@ -152,6 +155,7 @@ GEM
     nokogiri (1.14.1-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pg (1.4.5)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -219,7 +223,6 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (1.6.0-x86_64-linux)
     stimulus-rails (1.2.1)
       railties (>= 6.0.0)
     thor (1.2.1)
@@ -257,13 +260,16 @@ DEPENDENCIES
   bootsnap
   bootstrap-sass (= 3.4.1)
   capybara
+  chartkick
   debug
   devise
   devise_invitable (~> 2.0.0)
   faker
+  groupdate
   importmap-rails
   jbuilder
   jquery-rails
+  pg
   pry
   puma (~> 5.0)
   rails (~> 7.0.4, >= 7.0.4.2)
@@ -271,7 +277,6 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   sprockets-rails
-  sqlite3 (~> 1.4)
   stimulus-rails
   turbo-rails
   tzinfo-data

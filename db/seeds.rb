@@ -5,49 +5,49 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-return unless Rails.env == 'development' || Rails.env == 'test' || ENV['HEROKU_BRANCH'].present?
 
-# Method to make users
-def make_user(attrs)
-  options = attrs.dup
+# Generate a bunch of additional users.
+100.times do |n|
+  email = "example-#{n+1}@railstutorial.org"
+  password = "password"
+  user = User.create!(
+               email: email,
+               password:password,
+               password_confirmation: password,
+               confirmed_at: Time.zone.now + n.seconds)
 
-  options[:confirmed_at] = DateTime.now
-  options[:password] = 'password'
-  options[:password_confirmation] = 'password'
+  user.create_user_profile(first_name: 'Adminvijay', phone: '123456789')
+  user.create_role(role_name: 'admin')
+  org = user.create_organization(organization_name: "Ongraph + #{n}")
+  user.organization_memberships.create(organization_id: org.id)
 
-  User.first_or_create(options)
-end
+  100.times do |i|
+    invite = User.invite!(email: "leader1-#{i}@gmail.com",invited_by: user)
+    invite.create_user_profile(first_name: 'Leadervijay', phone: '123456789')
+    invite.create_role(role_name: 'leader')
+    invite.organization_memberships.create(organization_id: org.id)
+    invite.groups.create(group_name: "group1-#{i}", organization_id: org.id)
+    invite.update(confirmed_at: Time.zone.now + i.minutes,
+      invitation_accepted_at: Time.zone.now + i.minutes)
 
-# Method to make organization Admins
-def make_organization_admin(attrs)
-  user = make_user(attrs)
+    100.times do |m|
+      member = User.invite!(email: "member1-#{m}@gmail.com",invited_by: invite)
+      member.create_user_profile(first_name: 'Membervijay', phone: '123456789')
+      member.create_role(role_name: 'member')
+      member.organization_memberships.create(organization_id: org.id)
+      member.update(confirmed_at: Time.zone.now + m.minutes,
+        invitation_accepted_at: Time.zone.now + m.minutes)
+    end
 
-  # Create Organization
-  organization = Organization.create!(
-    organization_name: 'Example Organization', user_id: user.id
-  )
+    100.times do |m|
+      member = User.invite!(email: "member2-#{m}@gmail.com",invited_by: invite)
+      member.create_user_profile(first_name: 'Membervijay', phone: '123456789')
+    end
+  end
 
-  # Create Membership and Set Role
-  OrganizationMembership.create!(
-    organization: organization, user: user
-  )
-
-  UserProfile.create!(
-    first_name: 'john', user: user, phone: '123456'
-  )
-
-  Role.create!(
-    role_name: 'admin', user: user
-  )
-end
-
-# Add User to Development ENV
-make_organization_admin(
-  email: 'organization.admin@example.com'
-)
-
-# Add TaskList to Development ENV for test functionality
-if Rails.env.development?
-  TaskList.where(title: 'To be done', organization_board_id: 1).first_or_create
-  Task.where(title: :'Read redis', start_date_time: Time.now, creator_id: 1, task_list_id: 1).first_or_create
+  100.times do |i|
+    invite = User.invite!(email: "leader2-#{i}@gmail.com",invited_by: user)
+    invite.create_user_profile(first_name: 'Leadervijay', phone: '123456789')
+    invite.groups.create(group_name: "group2-#{i}", organization_id: org.id)
+  end
 end

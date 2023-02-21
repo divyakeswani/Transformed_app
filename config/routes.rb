@@ -18,4 +18,5 @@ Rails.application.routes.draw do
 
   resources :signups, only: [:edit, :update]
   resources :groups
+  resources :dashboards, only: [:index]
 end

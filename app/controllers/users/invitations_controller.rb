@@ -109,13 +109,13 @@ class Users::InvitationsController < Devise::InvitationsController
     )
   end
 
-  # creating mambership and role
+  # creating membership and role
   def membership_role_of_leader(resource, group)
     OrganizationMembership.create(user_id: resource.id, organization_id: group.organization_id)
     Role.create(role_name: 'leader', user_id: resource.id)
   end
 
-   # creating mambership and role
+   # creating membership and role
   def membership_role_of_member(resource)
     OrganizationMembership.create(user_id: resource.id, organization_id: resource.invited_by.invited_by.organization.id)
     Role.create(role_name: 'member', user_id: resource.id)
