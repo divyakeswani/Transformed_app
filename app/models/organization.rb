@@ -7,6 +7,7 @@ class Organization < ApplicationRecord
   has_many :groups, dependent: :destroy
   has_many :organization_memberships, dependent: :destroy
   has_many :users, through: :organization_memberships
+  has_many :roles, dependent: :destroy
 
   validates_presence_of :organization_name
   validates_uniqueness_of :organization_name

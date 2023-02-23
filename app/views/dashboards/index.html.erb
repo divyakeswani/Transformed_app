@@ -11,13 +11,13 @@
     </div>
     <div class="dashboard">
       <div  class="form">
-        <%= line_chart User.group(:created_at).count %>
-        <%= pie_chart User.group(:confirmed_at).count %>
+        <%= pie_chart @leader.group(:created_at).count %> 
+        <%= pie_chart User.group(:invitation_accepted_at).count %>
       </div>
       <div style="width: 100%">
         <div style="display: flex; flex-direction: row;">
-          <h6 style="text-align: center; width: 65%;">Total Leaders</h6>
-          <h6 style="text-align: left; width: 35%;">Total Members</h6>
+          <h4 style="text-align: center; width: 65%;">Total Leaders</h6>
+          <h4 style="text-align: left; width: 35%;">Total Members</h6>
         </div>
       </div>
       <div style="width: 100%">

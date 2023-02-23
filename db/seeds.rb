@@ -17,14 +17,14 @@
                confirmed_at: Time.zone.now + n.seconds)
 
   user.create_user_profile!(first_name: 'Adminvijay', phone: '123456789')
-  user.create_role!(role_name: 'admin')
   org = user.create_organization!(organization_name: "Ongraph + #{n}")
+  user.create_role!(role_name: 'admin', organization_id: org.id)
   user.organization_memberships.create!(organization_id: org.id)
 
   10.times do |i|
     invite = User.invite!({email: "leader1-#{i}@gmail.com"}, user)
     invite.create_user_profile!(first_name: 'Leadervijay', phone: '123456789')
-    invite.create_role!(role_name: 'leader')
+    invite.create_role!(role_name: 'leader', organization_id: org.id)
     invite.organization_memberships.create!(organization_id: org.id)
     invite.groups.create!(group_name: "group1-#{i}", organization_id: org.id)
     invite.update!(confirmed_at: Time.zone.now + i.minutes,
@@ -33,7 +33,7 @@
     10.times do |m|
       member = User.invite!({email: "member1-#{m}@gmail.com"}, invite)
       member.create_user_profile!(first_name: 'Membervijay', phone: '123456789')
-      member.create_role!(role_name: 'member')
+      member.create_role!(role_name: 'member', organization_id: org.id)
       member.organization_memberships.first_or_create!(organization_id: org.id)
       member.update!(confirmed_at: Time.zone.now + m.minutes,
         invitation_accepted_at: Time.zone.now + m.minutes)
