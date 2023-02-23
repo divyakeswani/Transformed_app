@@ -2,16 +2,54 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="tab"
 export default class extends Controller {
-  static targets = ["info"]
+  static targets = ["all", "accepted", "pending"]
 
   connect() {
     console.log('connected')
+    this.allTargets.forEach(el => {
+      el.hidden = true
+    });
+    this.acceptedTargets.forEach(el => {
+      el.hidden = true
+    });
+    this.pendingTargets.forEach(el => {
+      el.hidden = true
+    });
   }
 
-  infoShow(){
-    console.log('info')
-    this.infoTargets.forEach(el => {
+  allShow(){
+    this.allTargets.forEach(el => {
       el.hidden = false
+    });
+    this.acceptedTargets.forEach(el => {
+      el.hidden = true
+    });
+    this.pendingTargets.forEach(el => {
+      el.hidden = true
+    });
+  }
+
+  acceptedShow(){
+    this.acceptedTargets.forEach(el => {
+      el.hidden = false
+    });
+    this.allTargets.forEach(el => {
+      el.hidden = true
+    });
+    this.pendingTargets.forEach(el => {
+      el.hidden = true
+    });
+  }
+
+  pendingShow(){
+    this.pendingTargets.forEach(el => {
+      el.hidden = false
+    });
+    this.acceptedTargets.forEach(el => {
+      el.hidden = true
+    });
+    this.allTargets.forEach(el => {
+      el.hidden = true
     });
   }
 }

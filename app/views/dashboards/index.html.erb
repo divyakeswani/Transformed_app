@@ -1,2 +1,78 @@
-<%= line_chart User.group_by_day(:created_at, range: 1.month.ago..Time.now)
- .count %>
+<% if current_user.role.role_name == 'admin' %>
+  <div class="background">
+    <div class="tabs">
+      <div class="tab-size"><%= link_to 'Dashboard', dashboards_path  %></div>
+      <div class="tab-size"><%= link_to 'Settings','' %></div>
+      <div class="tab-size"><%= link_to 'Curriculum', '' %></div>
+      <div class="tab-size"><%= link_to  'Analytics', ''%></div>
+      <div class="tab-size"><%= link_to  'Reminders', ''%></div>
+      <div class="tab-size" data-action="tab#infoShow"><%= link_to  'View Groups', new_user_invitation_path  %></div>
+      <div class="tab-size"><%= link_to  'Invite Organization', ''%></div>
+    </div>
+    <div class="dashboard">
+      <div  class="form">
+        <%= line_chart User.group(:created_at).count %>
+        <%= pie_chart User.group(:confirmed_at).count %>
+      </div>
+      <div style="width: 100%">
+        <div style="display: flex; flex-direction: row;">
+          <h6 style="text-align: center; width: 65%;">Total Leaders</h6>
+          <h6 style="text-align: left; width: 35%;">Total Members</h6>
+        </div>
+      </div>
+      <div style="width: 100%">
+        <div style="margin-left: 15%" data-controller="tab">
+          <h2>Groups</h2>
+          <button data-action="tab#allShow">All</button>
+          <button data-action="tab#acceptedShow">Accepted</button>
+          <button data-action="tab#pendingShow">Pending</button>
+          <table>
+            <thead>
+              <tr>
+                <th>Group Name</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody data-tab-target="all">
+              <% Group.group_find(current_user).each do |g| %>
+                <tr>
+                  <td><%= g.group_name %></td>
+                  <% if g.leader.confirmed? %>
+                    <td><%= link_to 'show', group_path(g.id) %></td>
+                  <% else %>
+                    <td><%= link_to 'resend_invite', "/users/#{g.leader.id}/resend_invitation",
+                    data: { turbo_method: :patch } %></td>
+                    <td><%= link_to 'send_invite_to_another_leader',
+                      new_user_invitation_path(group_id: g)%></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            </tbody>
+            <tbody data-tab-target="accepted">
+
+            </tbody>
+            <tbody data-tab-target="pending">
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+<% elsif current_user.role.role_name == 'leader' %>
+  <div class="background">
+    <div class="tabs">
+      <div class="tab-size"><%= link_to 'Dashboard', dashboards_path  %></div>
+      <div class="tab-size"><%= link_to 'Settings','' %></div>
+      <div class="tab-size"><%= link_to 'Curriculum', '' %></div>
+      <div class="tab-size"><%= link_to  'Analytics', ''%></div>
+      <div class="tab-size"><%= link_to  'Reminders', ''%></div>
+      <div class="tab-size" data-action="tab#infoShow"><%= link_to  'View Members', new_user_invitation_path  %></div>
+    </div>
+    <div class="form_data info">
+      <h2>Members</h2>
+    </div>
+  </div>
+<% end %>
+

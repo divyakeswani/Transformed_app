@@ -56,85 +56,57 @@
           <% end %>
         </div>
       </div>
-  </div>
-  <div class="form_data info">
-    <h2>Groups</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Group Name</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% group.each do |g| %>
-          <tr>
-            <td><%= g.group_name %></td>
-            <% if g.leader.confirmed? %>
-              <td><%= link_to 'show', group_path(g.id) %></td>
-            <% else %>
-              <td><%= link_to 'resend_invite', "/users/#{g.leader.id}/resend_invitation",
-              data: { turbo_method: :patch } %></td>
-              <td><%= link_to 'send_invite_to_another_leader',
-                new_user_invitation_path(group_id: g)%></td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-  <% else %>
-    <div class="form">
-      <div>
-        <h2 style='text-align: center'>Invite new leader for group</h2>
-          <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
-            <%= render "devise/shared/error_messages", resource: resource %>
+    <% else %>
+      <div class="form">
+        <div>
+          <h2 style='text-align: center'>Invite new leader for group</h2>
+            <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: { method: :post }) do |f| %>
+              <%= render "devise/shared/error_messages", resource: resource %>
 
-          <div>
-            <h4>First Name:</h4>
-            <%= text_field_tag :'user_profile[first_name]'  %><br />
-          </div>
+            <div>
+              <h4>First Name:</h4>
+              <%= text_field_tag :'user_profile[first_name]'  %><br />
+            </div>
 
-          <div>
-            <h4>Last Name:</h4>
-            <%= text_field_tag :'user_profile[last_name]'  %><br />
-          </div>
+            <div>
+              <h4>Last Name:</h4>
+              <%= text_field_tag :'user_profile[last_name]'  %><br />
+            </div>
 
-          <div>
-            <h4>Phone:</h4>
-            <%= telephone_field_tag :'user_profile[phone]' %><br />
-          </div>
+            <div>
+              <h4>Phone:</h4>
+              <%= telephone_field_tag :'user_profile[phone]' %><br />
+            </div>
 
-          <div>
-            <h4>Email:</h4>
-            <%= email_field_tag :'user[email]' %><br /><br />
-          </div>
+            <div>
+              <h4>Email:</h4>
+              <%= email_field_tag :'user[email]' %><br /><br />
+            </div>
 
-          <div>
-            <%= hidden_field_tag  :'user[password]' , Devise.friendly_token[5,20] %>
-            <%= hidden_field_tag :'user[skip_invitation]', 'true' %>
-            <%= hidden_field_tag :'role[role_name]', 'leader' %>
-            <%= hidden_field_tag :'group_id', params[:group_id] %>
-          </div>
+            <div>
+              <%= hidden_field_tag  :'user[password]' , Devise.friendly_token[5,20] %>
+              <%= hidden_field_tag :'user[skip_invitation]', 'true' %>
+              <%= hidden_field_tag :'role[role_name]', 'leader' %>
+              <%= hidden_field_tag :'group_id', params[:group_id] %>
+            </div>
 
-          <div>
-            <%= f.submit 'submit', class: "btn btn-primary" %>
-          </div>
-        <% end %>
+            <div>
+              <%= f.submit 'submit', class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 <% elsif current_user.role.role_name == 'leader' %>
   <div class="background">
     <div class="tabs" data-tab-target="info">
-      <div class="tab-size"><%= link_to 'Dashboard', ''  %></div>
+      <div class="tab-size"><%= link_to 'Dashboard', dashboards_path  %></div>
       <div class="tab-size"><%= link_to 'Settings','' %></div>
       <div class="tab-size"><%= link_to 'Curriculum', '' %></div>
       <div class="tab-size"><%= link_to  'Analytics', ''%></div>
       <div class="tab-size"><%= link_to  'Reminders', ''%></div>
       <div class="tab-size" data-action="tab#infoShow"><%= link_to  'View Members', new_user_invitation_path  %></div>
-      <div class="tab-size"><%= link_to  'Invite Organization', ''%></div>
     </div>
     <div class="form">
       <div class="form_data">
@@ -176,9 +148,6 @@
         <% end %>
       </div>
     </div>
-  </div>
-  <div class="form_data info">
-    <h2>Members</h2>
   </div>
 <% else %>
   <div>

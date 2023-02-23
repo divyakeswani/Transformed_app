@@ -13,4 +13,5 @@ class User < ApplicationRecord
   has_many :groups, foreign_key: 'leader_id', dependent: :destroy
   has_many :group_members, foreign_key: 'member_id', dependent: :destroy
   has_many :organization_memberships, dependent: :destroy
+  has_many :invitations, class_name: 'User', as: :invited_by
 end
