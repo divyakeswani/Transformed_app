@@ -11,8 +11,8 @@
     </div>
     <div class="dashboard">
       <div  class="form">
-        <%= pie_chart @leader.group(:created_at).count %> 
-        <%= pie_chart User.group(:invitation_accepted_at).count %>
+        <%= pie_chart @u.group(:invitation_accepted_at).count %>
+        <%= pie_chart @members.group(:current_sign_in_at).count %>
       </div>
       <div style="width: 100%">
         <div style="display: flex; flex-direction: row;">
@@ -35,7 +35,7 @@
               </tr>
             </thead>
             <tbody data-tab-target="all">
-              <% Group.group_find(current_user).each do |g| %>
+              <% @groups.each do |g| %>
                 <tr>
                   <td><%= g.group_name %></td>
                   <% if g.leader.confirmed? %>
@@ -50,10 +50,26 @@
               <% end %>
             </tbody>
             <tbody data-tab-target="accepted">
-
+              <% @groups.each do |g| %>
+                <% if g.leader.confirmed? %>
+                  <tr>
+                    <td><%= g.group_name %></td>
+                    <td><%= link_to 'show', group_path(g.id) %></td>
+                  </tr>
+                <% end %>
+              <% end %>
             </tbody>
             <tbody data-tab-target="pending">
-
+              <% @groups.each do |g| %>
+                <% unless g.leader.confirmed? %>
+                  <tr>
+                    <td><%= g.group_name %></td>
+                    <td><%= link_to 'resend_invite', "/users/#{g.leader.id}/resend_invitation", data: { turbo_method: :patch } %></td>
+                    <td><%= link_to 'send_invite_to_another_leader',
+                        new_user_invitation_path(group_id: g)%></td>
+                  </tr>
+                <% end %>
+              <% end %>
             </tbody>
           </table>
         </div>

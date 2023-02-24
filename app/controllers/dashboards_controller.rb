@@ -3,8 +3,12 @@
 # app/controllers/dashboards_controller.rb
 class DashboardsController < ApplicationController
   def index
-    @user  = OrganizationMembership.where(organization_id: current_user.organization.id)
-    @leader = current_user.organization.roles.where(role_name: 'leader')
-    @member = current_user.organization.roles.where(role_name: 'member')
+    if current_user.role.role_name == 'admin'
+      org = current_user.organization.id
+      @groups = DashboardPresenter.new.leaders(org)
+
+      @u = User.includes(:groups).where("groups.organization_id = #{org}").references(:groups)
+      @members = DashboardPresenter.new.members(org)
+    end
   end
 end

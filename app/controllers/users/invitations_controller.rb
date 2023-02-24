@@ -10,11 +10,8 @@ class Users::InvitationsController < Devise::InvitationsController
     if resource_invited
       @profile = resource.create_user_profile(profile_params)
       if @profile.errors.empty?
-        if params[:group].present?
-          group_creation(resource)
-        else
-          group_leader_update(resource)
-        end
+        params[:group].present? ?
+          group_creation(resource) : group_leader_update(resource)
       else
         flash[:notice] = @profile.errors.full_messages
         redirect_to request.referrer
@@ -112,13 +109,13 @@ class Users::InvitationsController < Devise::InvitationsController
   # creating membership and role
   def membership_role_of_leader(resource, group)
     OrganizationMembership.create(user_id: resource.id, organization_id: group.organization_id)
-    Role.create(role_name: 'leader', user_id: resource.id)
+    Role.create(role_name: 'leader', user_id: resource.id, organization_id: group.organization_id)
   end
 
    # creating membership and role
   def membership_role_of_member(resource)
     OrganizationMembership.create(user_id: resource.id, organization_id: resource.invited_by.invited_by.organization.id)
-    Role.create(role_name: 'member', user_id: resource.id)
+    Role.create(role_name: 'member', user_id: resource.id, organization_id: resource.invited_by.invited_by.organization.id)
   end
 
   # updating password after accepting invitation
