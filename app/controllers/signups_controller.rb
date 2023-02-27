@@ -5,6 +5,7 @@ class SignupsController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :set_user
   before_action :user_profile, only: :update
+  after_action  -> {membership_and_role(@user, @org)}, only: :update
 
   # GET '/signups/:id/edit'
   def edit; end
@@ -14,7 +15,6 @@ class SignupsController < ApplicationController
     if @user.update(user_params)
       @user.update(confirmed_at: Time.current)
       @org.save
-      membership_and_role(@user, @org)
       redirect_to new_user_session_path
       flash[:notice] = 'you have successfully signed-up'
     else
@@ -72,7 +72,7 @@ class SignupsController < ApplicationController
   end
 
   def membership_and_role(user, org)
-    user.create_role(role_name: 'admin')
+    user.create_role(role_name: 'admin', organization_id: org.id)
     user.organization_memberships.create(organization_id: org.id)
   end
 end

@@ -80,7 +80,7 @@ class Users::InvitationsController < Devise::InvitationsController
 
   # Permit the group params here.
   def group_params
-		params.require(:group).permit(:group_name, :organization_id)
+		params.require(:group).permit(:group_name, :organization_id, :active)
   end
 
   # creating group
@@ -121,6 +121,7 @@ class Users::InvitationsController < Devise::InvitationsController
   # updating password after accepting invitation
   def update_password(resource)
     resource.update!(user_params) if user_params.present?
+    binding.pry
   end
 
   def group_creation(resource)

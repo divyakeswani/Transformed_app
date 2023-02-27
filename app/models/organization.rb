@@ -2,6 +2,7 @@
 
 # app/models/organization.rb
 class Organization < ApplicationRecord
+  # Associations
   belongs_to :creator, class_name: 'User',
                     foreign_key: 'creator_id'
   has_many :groups, dependent: :destroy
@@ -9,6 +10,7 @@ class Organization < ApplicationRecord
   has_many :users, through: :organization_memberships
   has_many :roles, dependent: :destroy
 
+  # Validations
   validates_presence_of :organization_name
   validates_uniqueness_of :organization_name
   validates_uniqueness_of :creator_id

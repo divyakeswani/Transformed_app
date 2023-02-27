@@ -7,7 +7,7 @@
 #   Character.create(name: "Luke", movie: movies.first)
 
 # Generate a bunch of additional users.
-2.times do |n|
+1.times do |n|
   email = "example-#{n+1}@railstutorial.org"
   password = "password"
   user = User.create!(
@@ -26,7 +26,8 @@
     invite.create_user_profile!(first_name: 'Leadervijay', phone: '123456789')
     invite.create_role!(role_name: 'leader', organization_id: org.id)
     invite.organization_memberships.create!(organization_id: org.id)
-    invite.groups.create!(group_name: "group1-#{i}", organization_id: org.id)
+    invite.groups.create!(group_name: "group1-#{i}", organization_id: org.id,
+      active: true)
     invite.update!(confirmed_at: Time.zone.now + i.minutes,
       invitation_accepted_at: Time.zone.now + i.minutes)
 
@@ -45,9 +46,10 @@
     end
   end
 
-  10.times do |i|
+  5.times do |i|
     invite = User.invite!({email: "leader2-#{i}@gmail.com"}, user)
     invite.create_user_profile!(first_name: 'Leadervijay', phone: '123456789')
-    invite.groups.create!(group_name: "group2-#{i}", organization_id: org.id)
+    invite.groups.create!(group_name: "group2-#{i}", organization_id: org.id,
+      active: false)
   end
 end

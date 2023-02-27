@@ -2,11 +2,13 @@
 
 # app/models/group.rb
 class Group < ApplicationRecord
+  # Associations
   belongs_to :organization
   belongs_to :leader, class_name: 'User',
                     foreign_key: 'leader_id'
-
   has_many :group_members, dependent: :destroy
+
+  # Validations
   validates_presence_of :group_name
   validates_uniqueness_of :group_name, scope: [:organization_id]
 end

@@ -2,7 +2,7 @@
 
 # app/presenters/dashboard_presenter.rb
 class DashboardPresenter
-  def leaders(org)
+  def groups(org)
     @groups = Group.eager_load(:leader).where("groups.organization_id = #{org}").references(:leader)
 
     @groups

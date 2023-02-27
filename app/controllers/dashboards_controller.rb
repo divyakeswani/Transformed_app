@@ -5,10 +5,10 @@ class DashboardsController < ApplicationController
   def index
     if current_user.role.role_name == 'admin'
       org = current_user.organization.id
-      @groups = DashboardPresenter.new.leaders(org)
+      @groups = DashboardPresenter.new.groups(org)
+      @members = DashboardPresenter.new.members(org)
 
       @u = User.includes(:groups).where("groups.organization_id = #{org}").references(:groups)
-      @members = DashboardPresenter.new.members(org)
     end
   end
 end

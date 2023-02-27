@@ -27,6 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_174755) do
     t.bigint "organization_id", null: false
     t.integer "leader_id", null: false
     t.string "group_name", default: "", null: false
+    t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id", "group_name"], name: "index_groups_on_organization_id_and_group_name", unique: true

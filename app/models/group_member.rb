@@ -2,6 +2,7 @@
 
 # app/models/group_member.rb
 class GroupMember < ApplicationRecord
+  # Associations
   belongs_to :group
   belongs_to :member, class_name: 'User',
                       foreign_key: 'member_id'
