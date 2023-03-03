@@ -9,7 +9,7 @@ class DashboardPresenter
   end
 
   def members(org)
-    @members = User.eager_load(:member).where(roles: {organization_id: org})
+    @members = User.eager_load(:member).where(user_roles: {organization_id: org})
 
     @members
   end

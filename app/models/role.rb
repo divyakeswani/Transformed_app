@@ -1,13 +1,7 @@
-# frozen_string_literal: true
-
-# app/models/role.rb
 class Role < ApplicationRecord
-  # Associations
-  belongs_to :user
-  belongs_to :organization
+  has_many :user_roles
 
-  # Validations
-  validates_presence_of :role_name
-
-  scope :member, ->{where(role_name: 'member')}
+  VALID_ROLES = ['admin', 'leader', 'member']
+  validates :role_name, presence: true, uniqueness: true
+  validates :role_name, inclusion: { in: VALID_ROLES }
 end

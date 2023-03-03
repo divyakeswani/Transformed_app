@@ -6,6 +6,8 @@
   <% else %>
     <div class="container">
       <div class="form_fields">
+        <h2>Continue to signup your account</h2>
+        <h4 style='text-align: center'>(Marked fields are required to fill)</h4>
         <%= form_for @user, url: :signup  do |f| %>
           <div class="field">
             <h4>Email:</h4>
@@ -13,23 +15,27 @@
           </div>
 
           <div class="field">
-            <h4>First Name:</h4>
-            <%= text_field_tag :'user_profile[first_name]'  %><br />
+            <h4>First Name<span aria-hidden="true" class="required">*</span> :</h4>
+            <%= text_field_tag :'user_profile[first_name]', (@user.
+              user_profile.first_name if @user.user_profile.present?) %><br />
 
             <h4>Last Name:</h4>
-            <%= text_field_tag :'user_profile[last_name]'  %><br />
+            <%= text_field_tag :'user_profile[last_name]', (@user.
+              user_profile.last_name if @user.user_profile.present?) %><br />
 
-            <h4>Phone:</h4>
-            <%= text_field_tag :'user_profile[phone]' %><br />
+            <h4>Phone<span aria-hidden="true" class="required">*</span> :</h4>
+            <%= text_field_tag :'user_profile[phone]', (@user.
+              user_profile.phone if @user.user_profile.present?) %><br />
           </div>
 
           <div class="field">
-            <h4>Organization Name:</h4>
-            <%= text_field_tag :'organization[organization_name]' %><br />
+            <h4>Organization Name<span aria-hidden="true" class="required">*</span> :</h4>
+            <%= text_field_tag :'organization[organization_name]', (@user.
+              organization.organization_name if @user.organization.present?) %><br />
           </div>
 
           <div class="field">
-            <h4>password:</h4>
+            <h4>password<span aria-hidden="true" class="required">*</span> :</h4>
             <%= f.password_field :password, autocomplete: "new-password" %>
             <% if @minimum_password_length %>
               <br />
@@ -38,7 +44,8 @@
           </div>
 
           <div class="field">
-            <h4>password_confirmation:</h4>
+            <h4>password_confirmation<span aria-hidden="true" class="required">*
+             </span> :</h4>
             <%= f.password_field :password_confirmation, autocomplete: "new-password" %><br><br>
           </div>
 

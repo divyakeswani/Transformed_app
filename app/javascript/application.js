@@ -4,11 +4,5 @@ import "controllers"
 import "chartkick"
 import "Chart.bundle"
 
-// require('jquery')
-// require("user")
-
-
-
-//= require jquery3
-//= require jquery_ujs
-//= require_tree .
+//= require rails-ujs
+//= require jquery

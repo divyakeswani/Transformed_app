@@ -8,7 +8,8 @@ class Organization < ApplicationRecord
   has_many :groups, dependent: :destroy
   has_many :organization_memberships, dependent: :destroy
   has_many :users, through: :organization_memberships
-  has_many :roles, dependent: :destroy
+  has_many :user_roles, class_name: 'UserRole', dependent: :destroy
+  has_many :roles, through: :user_roles
 
   # Validations
   validates_presence_of :organization_name

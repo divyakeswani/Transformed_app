@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="tab"
 export default class extends Controller {
-  static targets = ["all", "accepted", "pending"]
+  static targets = ["all", "accepted", "pending", "info"]
 
   connect() {
     console.log('connected')
@@ -51,5 +51,14 @@ export default class extends Controller {
     this.allTargets.forEach(el => {
       el.hidden = true
     });
+  }
+
+  infoShow(){
+    console.log('hello')
+    this.infoTargets.forEach(el => {
+      debugger
+      el.hidden = false
+    });
+    debugger
   }
 }

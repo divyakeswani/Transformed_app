@@ -14,9 +14,14 @@ Rails.application.routes.draw do
 
   get 'static_pages/landing_page'
   get 'static_pages/dashboard'
-  root "static_pages#landing_page"
 
   resources :signups, only: [:edit, :update]
   resources :groups
   resources :dashboards, only: [:index]
+  resources :analytics, only: [:index]
+
+  authenticated :user do
+    root :to => 'dashboards#index', as: :authenticated_root
+  end
+  root :to => 'static_pages#landing_page'
 end

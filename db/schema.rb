@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_23_174755) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_01_115356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -27,7 +27,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_174755) do
     t.bigint "organization_id", null: false
     t.integer "leader_id", null: false
     t.string "group_name", default: "", null: false
-    t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["organization_id", "group_name"], name: "index_groups_on_organization_id_and_group_name", unique: true
@@ -52,12 +51,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_174755) do
   end
 
   create_table "roles", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "role_name", default: "", null: false
+    t.string "role_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "organization_id", null: false
-    t.index ["user_id"], name: "index_roles_on_user_id"
+    t.index ["role_name"], name: "index_roles_on_role_name", unique: true
   end
 
   create_table "user_profiles", force: :cascade do |t|
@@ -68,6 +65,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_174755) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_profiles_on_user_id"
+  end
+
+  create_table "user_roles", force: :cascade do |t|
+    t.integer "role_id", null: false
+    t.integer "organization_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["role_id", "organization_id", "user_id"], name: "index_user_roles_on_role_id_and_organization_id_and_user_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -114,6 +120,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_23_174755) do
   add_foreign_key "organization_memberships", "organizations"
   add_foreign_key "organization_memberships", "users"
   add_foreign_key "organizations", "users", column: "creator_id"
-  add_foreign_key "roles", "users"
   add_foreign_key "user_profiles", "users"
 end

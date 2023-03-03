@@ -1,0 +1,27 @@
+<% if current_user.role.role_name == 'admin' %>
+  <div class="background" data-controller="chart">
+    <div class="tabs" data-tab-target="info">
+      <div class="tab-size"><%= link_to 'Dashboard', dashboards_path  %></div>
+      <div class="tab-size"><%= link_to 'Settings','' %></div>
+      <div class="tab-size"><%= link_to 'Curriculum', '' %></div>
+      <div class="tab-size"><%= link_to  'Analytics', analytics_path, data:{action:"chart#chartShow"} %></div>
+      <div class="tab-size"><%= link_to  'Reminders', ''%></div>
+      <div class="tab-size" data-action="tab#infoShow"><%= link_to  'View Groups', new_user_invitation_path  %></div>
+      <div class="tab-size"><%= link_to  'Invite Organization', ''%></div>
+    </div>
+    <div style="width: 80%; display: flex;">
+      <div style="width: 100%;">
+        <h2 style="text-align: center;">Bar graph</h2>
+        <div id="chartContainer">
+          <% User.first(1).each do |i| %>
+            <div data-chart-target="bar" class="bar" id="id-1"></div>
+            <div class="bar" id="id-2"></div>
+            <div class="bar" id="id-3"></div>
+            <div class="bar" id="id-4"></div>
+            <div class="bar" id="id-5"></div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

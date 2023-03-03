@@ -5,7 +5,6 @@ class CreateGroups < ActiveRecord::Migration[7.0]
         foreign_key: true, index: true, unique: true
       t.integer :leader_id, null: false
       t.string :group_name, null: false, default: ''
-      t.boolean :active, null: false, default: false
 
       t.timestamps
     end

@@ -1,35 +1,19 @@
-<% if user_signed_in? %>
-  <div class="background" data-controller='tab'>
-    <div class="tabs" data-tab-target="info">
-      <div class="tab-size"><%= link_to 'Dashboard', dashboards_path  %></div>
-      <div class="tab-size"><%= link_to 'Settings','' %></div>
-      <div class="tab-size"><%= link_to 'Curriculum', '' %></div>
-      <div class="tab-size"><%= link_to  'Analytics', ''%></div>
-      <div class="tab-size"><%= link_to  'Reminders', ''%></div>
-      <div class="tab-size" data-action="tab#infoShow"><%= link_to  'View Groups', new_user_invitation_path  %></div>
-      <div class="tab-size"><%= link_to  'Invite Organization', ''%></div>
+<div class='display'>
+  <div>
+    <h2>Hey! Do you want to connect with us</h2>
+    <div class='text'>
+      <%= form_for User.new, url: :user_registration do |f| %>
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+        <%= f.hidden_field :password,value: Devise.friendly_token[5,20] %>
+        <%= f.submit "Connect" %>
+      <% end %>
     </div>
-    <div class="form">
-    </div>
-  </div>
-<% else %>
-  <div class='display'>
-    <div>
-      <h2>Hey! Do you want to connect with us</h2>
-      <div class='text'>
-        <%= form_for User.new, url: :user_registration do |f| %>
-          <%= f.label :email %><br />
-          <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-          <%= f.hidden_field :password,value: Devise.friendly_token[5,20] %>
-          <%= f.submit "Connect" %>
-        <% end %>
-      </div>
-      <div class="text">
-        <h2>
-          Already have an account ?<%= link_to 'Log in', new_user_session_path,
-            class:'btn btn-lg btn-primary' %>
-        </h2>
-      </div>
+    <div class="text">
+      <h2>
+        Already have an account ?<%= link_to 'Log in', new_user_session_path,
+          class:'btn btn-lg btn-primary' %>
+      </h2>
     </div>
   </div>
-<% end %>
+</div>

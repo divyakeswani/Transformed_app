@@ -161,3 +161,45 @@ td, th {
   align-items: center;
   flex-direction: column;
 }
+
+.required{
+  color: red;
+  font-size: 20px;
+}
+
+#chartContainer{
+  height: 300px;
+  width: 95%;
+  border-left: 6px solid red;
+  border-bottom: 6px solid red;
+  background-color: lightgrey;
+  margin-left: 30px;
+}
+
+.bar{
+  width: 5%;
+  background-color: blue;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+#id-1{
+  height: calc(100% - 10%);
+}
+
+#id-2{
+  height: calc(100% - 20%);
+}
+
+#id-3{
+  height: calc(100% - 30%);
+}
+
+#id-4{
+  height: calc(100% - 40%);
+}
+
+#id-5{
+  height: calc(100% - 50px);
+  margin-top: 50px;
+}

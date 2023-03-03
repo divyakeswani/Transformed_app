@@ -80,7 +80,7 @@ class Users::InvitationsController < Devise::InvitationsController
 
   # Permit the group params here.
   def group_params
-		params.require(:group).permit(:group_name, :organization_id, :active)
+		params.require(:group).permit(:group_name, :organization_id)
   end
 
   # creating group
@@ -109,19 +109,20 @@ class Users::InvitationsController < Devise::InvitationsController
   # creating membership and role
   def membership_role_of_leader(resource, group)
     OrganizationMembership.create(user_id: resource.id, organization_id: group.organization_id)
-    Role.create(role_name: 'leader', user_id: resource.id, organization_id: group.organization_id)
+    role = Role.find_by(role_name: 'leader')
+    UserRole.create(role_id: role.id, user_id: resource.id, organization_id: group.organization_id)
   end
 
    # creating membership and role
   def membership_role_of_member(resource)
     OrganizationMembership.create(user_id: resource.id, organization_id: resource.invited_by.invited_by.organization.id)
-    Role.create(role_name: 'member', user_id: resource.id, organization_id: resource.invited_by.invited_by.organization.id)
+    role = Role.find_by(role_name: 'member')
+    UserRole.create(role_id: role.id, user_id: resource.id, organization_id: resource.invited_by.invited_by.organization.id)
   end
 
   # updating password after accepting invitation
   def update_password(resource)
     resource.update!(user_params) if user_params.present?
-    binding.pry
   end
 
   def group_creation(resource)

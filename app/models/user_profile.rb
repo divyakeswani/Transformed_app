@@ -9,6 +9,6 @@ class UserProfile < ApplicationRecord
   validates_presence_of :first_name, :phone
 
   def full_name
-    first_name + last_name
+    (first_name + last_name).squeeze(' ')
   end
 end

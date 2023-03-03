@@ -5,7 +5,6 @@ class SignupsController < ApplicationController
   skip_before_action :authenticate_user!
   before_action :set_user
   before_action :user_profile, only: :update
-  after_action  -> {membership_and_role(@user, @org)}, only: :update
 
   # GET '/signups/:id/edit'
   def edit; end
@@ -14,7 +13,6 @@ class SignupsController < ApplicationController
   def update
     if @user.update(user_params)
       @user.update(confirmed_at: Time.current)
-      @org.save
       redirect_to new_user_session_path
       flash[:notice] = 'you have successfully signed-up'
     else
@@ -53,16 +51,19 @@ class SignupsController < ApplicationController
       organization()
     else
       flash[:notice] = @profile.errors.full_messages
-      render :edit, status: :unprocessable_entity
+      redirect_to edit_signup_path
     end
   end
 
   # creating organization
   def organization
     @org = @user.build_organization(organization_params)
-    unless @org.valid?
+    if @org.valid?
+      @user.organization = Organization.new(organization_params)
+      membership_and_role
+    else
       flash[:notice] = @org.errors.full_messages
-      render :edit, status: :unprocessable_entity
+      redirect_to edit_signup_path
     end
   end
 
@@ -71,8 +72,9 @@ class SignupsController < ApplicationController
     @user = User.find_by(id: params[:id])
   end
 
-  def membership_and_role(user, org)
-    user.create_role(role_name: 'admin', organization_id: org.id)
-    user.organization_memberships.create(organization_id: org.id)
+  def membership_and_role
+    role = Role.find_by(role_name: 'admin')
+    @user.create_user_role(role_id: role.id, organization_id: @user.organization.id)
+    @user.organization_memberships.create(organization_id: @user.organization.id)
   end
 end

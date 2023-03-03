@@ -13,11 +13,12 @@
       <div class="form">
         <div class="form_data">
           <h2 style='text-align: center'><%= t "devise.invitations.new.header" %></h2>
+          <h4 style='text-align: center'>(Marked fields are required to fill)</h4>
           <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {class: 'invite_leader', method: :post }) do |f| %>
             <%= render "devise/shared/error_messages", resource: resource %>
 
             <div>
-              <h4>First Name:</h4>
+              <h4>First Name<span aria-hidden="true" class="required">*</span> :</h4>
               <%= text_field_tag :'user_profile[first_name]'  %><br />
             </div>
 
@@ -27,19 +28,19 @@
             </div>
 
             <div>
-              <h4>Phone:</h4>
+              <h4>Phone<span aria-hidden="true" class="required">*</span> :</h4>
               <%= text_field_tag :'user_profile[phone]' %><br />
             </div>
 
             <% resource.class.invite_key_fields.each do |field| -%>
               <div>
-                <h4>Email:</h4>
+                <h4>Email<span aria-hidden="true" class="required">*</span> :</h4>
                 <%= f.text_field field %>
               </div>
             <% end -%>
 
             <div>
-              <h4>Group Name:</h4>
+              <h4>Group Name<span aria-hidden="true" class="required">*</span> :</h4>
               <%= text_field_tag :'group[group_name]' %><br /><br />
               <%= hidden_field_tag :'group[organization_id]', current_user.organization.id %>
             </div>

@@ -1,5 +1,5 @@
-document.addEventListener("turbolinks:load", function() {
-  $('#profile').on('click', function(){
+$(document).ready(function() {
+  $('#id-2').on('click', function(){
     debugger
   })
 }
